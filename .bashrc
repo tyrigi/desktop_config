@@ -78,76 +78,8 @@ if [ -f /etc/bash_completion ]; then
 . /etc/bash_completion
 fi
 
-#Frequently used environment variables
-export JAVA_HOME=/usr/lib/jvm/java-8-oracle
-export GTEST_DIR=/home/tyler/Build_Tools/googletest
-export CLASSPATH=/home/tyler/Build_Tools/junit-4.12.jar
-export ANDROID_NDK=/home/tyler/Build_Tools/android-ndk-r10e
-export ANDROID_SDK=/home/tyler/Android/Sdk
-export BIG_UP=../../../../../../../
+export EAGLEDIR='/home/tyler/Electronics/Eagle'
 
-#Stuff for Python for Android
-export ANDROIDSDK=/home/tyler/Android/Sdk/platforms/android-25
-export ANDROIDNDK=/home/tyler/Build_Tools/android-ndk-r10e
-export ANDROIDAPI=25
-export ANDROIDNDKVER=r10e
-
-#Frequently used commands
-alias get-id="git rev-parse HEAD | xclip -select c && xclip -selection c -o"
-alias refresh="source ~/.bashrc"
-alias dirs="dirs -v"
-
-#Functions to speed up testing
-        #Quickly find *.so library for test binaries
-        #TODO: add failsafes for non-existant/unfindable files
-function ajn_lib () {
-	unset path
-	unset LD_LIBRARY_PATH
-	for i in `seq 1 10`;
-	do
-	if [ "$1" == "" ]; then
-		break
-	else
-	while true
-	do
-	path="$path../"
-	if [[ $(find $path -maxdepth 1 -name ".bashrc" -type f -exec echo "{}" \;) ]]; then
-                echo "$1 not found"
-                break
-        else
-	if [[ $(find $path -maxdepth 10 -name "$1" -type f -not -path "*/obj/*" -exec echo "{}" \;) ]]; then
-		export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(dirname `find $path -maxdepth 10 -name "$1" -type f -not -path "*/obj/*" -exec readlink -f {} \; | head -n 1`)
-		break
-	fi
-	fi
-	done
-	fi
-	shift
-        echo $LD_LIBRARY_PATH
-	done
-}
-        #Quickly download all testing repositories with specified branch
-function pull-all() {
-        touch .root.flag
-	mkdir core
-	mkdir services
-	(cd core && git clone https://git.allseenalliance.org/gerrit/core/alljoyn.git -b $1)
-	(cd core && git clone https://git.allseenalliance.org/gerrit/core/ajtcl.git -b $1)
-	(cd core && git clone https://git.allseenalliance.org/gerrit/core/alljoyn-js.git -b $1)
-	(cd core && git clone https://git.allseenalliance.org/gerrit/core/test.git -b $1)
-	(cd services && git clone https://git.allseenalliance.org/gerrit/services/base.git -b $1)
-	(cd services && git clone https://git.allseenalliance.org/gerrit/services/base_tcl.git -b $1)
-	export ajn_root=$(pwd)
-	export base=$(pwd)/core/alljoyn
-	export base_bin=$(pwd)/core/alljoyn/build/linux/*/*/dist/cpp/bin
-	export tcl=$(pwd)/core/ajtcl
-	export js=$(pwd)/core/alljoyn-js
-	export js_bin=$(pwd)/core/alljoyn-js/dist/bin
-	export js_console=$(pwd)/core/alljoyn-js/console
-	export serv_tcl=$(pwd)/services/base_tcl
-}
-        #Navigate to specified file (fast way to get to test binaries)
-        #TODO: add failsafes for non-existant/unfindable files
 function moveto() {
 	unset path
 	unset destination
@@ -172,45 +104,5 @@ function moveto() {
 	fi
 	shift
 	done
-}
-        #Go back up to the repository root (whatever directory has the SConstruct file)
-function moveup() {
-	unset path
-	while true
-	do
-	path="$path../"
-	if [[ $(find $path -maxdepth 1 -name ".bashrc" -type f -exec echo "{}" \;) ]]; then
-                echo "SConstruct not found in any parent directories"
-                break
-        else
-	if [[ $(find $path -maxdepth 1 -name "SConstruct" -type f -exec echo "{}" \;) ]]; then
-		cd $(dirname `find $path -maxdepth 1 -name "SConstruct" -type f -exec echo "{}" \; | head -n 1`)
-		break
-	fi
-	fi
-	done
-}
-        #Return location of PolicyDB configurations
-function policyconf() {
-    find $POLICY_CONF -name "$1" -type f -exec readlink -f {} \; | head -n 1
-}
-
-function swapvar() {
-    if [[ $TEST_ROOT ]]; then
-    if [[ $(pwd | grep rel) ]]; then
-        cd $TEST_ROOT/../test-deb
-        echo "Debug Testing"
-    else
-        cd $TEST_ROOT/../test-rel
-        echo "Release Testing"
-    fi
-    refresh
-    else
-    echo "Unrecognized testing envionrment."
-    fi
-}
-
-function logit() {
-    $1 2>&1 | tee $2
 }
 
