@@ -1,0 +1,46 @@
+
+[Print Settings]
+print-at=now
+reverse=false
+resolution-x=300
+resolution-y=300
+scale=100
+cups-Resolution=300x300dpi
+cups-job-priority=50
+number-up=1
+default-source=Default
+page-set=all
+collate=false
+n-copies=1
+cups-InputSlot=Default
+cover-before=none
+cover-after=none
+printer=COEprint
+print-pages=all
+cups-number-up=1
+print-at-time=
+duplex=vertical
+cups-Duplex=DuplexTumble
+resolution=300
+cups-job-sheets=none,none
+
+page-ranges=0
+
+number-up-layout=lrtb
+cups-number-up-layout=lrtb
+
+evince-print-setting-page-scale=1
+evince-print-setting-page-autorotate=true
+
+cups-HalftoningAlgorithm=Standard
+
+[Page Setup]
+PPDName=Letter
+DisplayName=US Letter
+Width=215.89999389648438
+Height=279.39999389648438
+MarginTop=6.3499999999999996
+MarginBottom=14.224
+MarginLeft=6.3499999999999996
+MarginRight=6.3499999999999996
+Orientation=portrait

@@ -71,14 +71,16 @@ if ! shopt -oq posix; then
 fi
 
 #######################################################################################################
-# IoT Lab customizations
+# Flip Customizations
 #######################################################################################################
 #Enable bash command completion
 if [ -f /etc/bash_completion ]; then
 . /etc/bash_completion
 fi
 
-export EAGLEDIR='/home/tyler/Electronics/Eagle'
+stty erase 
+
+alias refresh="source ~/.bashrc"
 
 function moveto() {
 	unset path
